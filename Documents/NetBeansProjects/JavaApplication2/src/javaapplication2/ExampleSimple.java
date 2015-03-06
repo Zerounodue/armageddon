@@ -1,7 +1,9 @@
 package javaapplication2;
 
+import com.tinkerforge.BrickletBarometer;
+import com.tinkerforge.IPConnection;
 
-import javaapplication2.IPConnection;
+
 
 
 public class ExampleSimple {
