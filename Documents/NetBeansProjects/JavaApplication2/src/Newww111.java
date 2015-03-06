@@ -8,5 +8,5 @@
  *
  * @author Zerododici
  */
-public class Newww10_05 {
+public class Newww111 {
 }
