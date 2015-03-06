@@ -9,5 +9,4 @@
  * @author Zerododici
  */
 public class Newww10_05 {
-    
 }
