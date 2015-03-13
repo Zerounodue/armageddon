@@ -7,26 +7,24 @@ package armageddon;
 
 import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.IPConnection;
+import java.util.ArrayList;
 
 public class ExampleCallback {
-	private static final String HOST = "localhost";
-	private static final int PORT = 4223;
-	private static final String UID1 = "qFm"; // Change to your UID
-        private static final String UID2 = "qFz"; // Change to your UID
-
-        private static int oldBar1 =0;
-        private static int oldBar2 =0;
-        private static int bigChange1 =0;
+        private final static int NOT = 2;
+        private static String[] UIDs = {"qFm", "qFz", "qMz", "qFs"};
+        private static ArrayList<Runnable> threads = new ArrayList<>();
      
-
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
 	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
             
-            MeasureThread t1 = new MeasureThread(UID1);
-            MeasureThread t2 = new MeasureThread(UID2);
-            t1.run();
-            t2.run();
+            for (int i = 0; i < NOT; i++) {
+                String uid = UIDs[i];
+                MeasureThread t = new MeasureThread(uid);
+                t.run();
+                threads.add(t);
+            }
+
             /*
             MeasureThread t2 = new MeasureThread(UID2);
                

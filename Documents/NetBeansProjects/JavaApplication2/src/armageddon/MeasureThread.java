@@ -47,8 +47,8 @@ public class MeasureThread implements Runnable {
                                 
 			}
 		});
-            System.out.println("Press key to exit"); System.in.read();
-		ipcon1.disconnect();
+            //System.out.println("Press key to exit"); System.in.read();
+		//ipcon1.disconnect();
             
             
             
@@ -57,8 +57,10 @@ public class MeasureThread implements Runnable {
         } catch (AlreadyConnectedException ex) {
             Logger.getLogger(MeasureThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (TimeoutException ex) {
+            System.out.println("Timeout: " + UId);
             Logger.getLogger(MeasureThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotConnectedException ex) {
+            System.out.println("Could not connect to " + UId);
             Logger.getLogger(MeasureThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         
