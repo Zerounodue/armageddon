@@ -1,4 +1,4 @@
-package javaapplication2;
+package armageddon;
 
 import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.IPConnection;
