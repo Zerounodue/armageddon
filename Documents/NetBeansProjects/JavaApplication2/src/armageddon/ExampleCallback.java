@@ -22,6 +22,13 @@ public class ExampleCallback {
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
 	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
+            
+            MeasureThread t1 = new MeasureThread(UID1);
+            MeasureThread t2 = new MeasureThread(UID2);
+            t1.run();
+            t2.run();
+            /*
+            MeasureThread t2 = new MeasureThread(UID2);
                
 		IPConnection ipcon1 = new IPConnection(); // Create IP connection
 		BrickletBarometer b1 = new BrickletBarometer(UID1, ipcon1); // Create device object
@@ -77,10 +84,11 @@ public class ExampleCallback {
 			}
 		});
                         */
-
+/*
 		System.out.println("Press key to exit"); System.in.read();
 		ipcon1.disconnect();
                 ipcon2.disconnect();
+                */
 
 	}
 }
