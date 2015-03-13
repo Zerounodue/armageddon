@@ -10,8 +10,8 @@ import com.tinkerforge.IPConnection;
 import java.util.ArrayList;
 
 public class ExampleCallback {
-        private final static int NOT = 2;
-        private static String[] UIDs = {"qFm", "qFz", "qMz", "qFs"};
+        private final static int NOT = 4;
+        private static String[] UIDs = {"qMZ", "qFs", "qFm", "qFz"};
         private static ArrayList<Runnable> threads = new ArrayList<>();
      
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
@@ -24,7 +24,9 @@ public class ExampleCallback {
                 t.run();
                 threads.add(t);
             }
-
+            
+            System.out.println("Press key to exit"); System.in.read();
+            
             /*
             MeasureThread t2 = new MeasureThread(UID2);
                
