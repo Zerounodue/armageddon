@@ -11,10 +11,13 @@ import com.tinkerforge.IPConnection;
 public class ExampleCallback {
 	private static final String HOST = "localhost";
 	private static final int PORT = 4223;
-	private static final String UID1 = "qMZ"; // Change to your UID
-        private static final String UID2 = "qMZ"; // Change to your UID
+	private static final String UID1 = "qFm"; // Change to your UID
+        private static final String UID2 = "qFz"; // Change to your UID
 
-        private static int old =0;
+        private static int oldBar1 =0;
+        private static int oldBar2 =0;
+        private static int bigChange1 =0;
+     
 
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
 	//       might normally want to catch are described in the documentation
@@ -41,14 +44,28 @@ public class ExampleCallback {
 		// Add and implement air pressure listener (called if air pressure changes)
 		b1.addAirPressureListener(new BrickletBarometer.AirPressureListener() {
 			public void airPressure(int airPressure) {
-				System.out.println("Air Pressure: " + (int)(airPressure) + " mbar " + "diff "+(int)(airPressure - 979828) );
-                               // old=(int)(airPressure);
+                            if(Math.abs((int)(airPressure/10- oldBar1 ))>=2){
+                                
+				//System.out.println("Air Pressure 1: " + (int)(airPressure/10) + " cbar " + (int)(airPressure/10- oldBar1 ) + "diff" );
+                                bigChange1=(int)(airPressure/10);
+                            }
+                            else{bigChange1=0;}
+                                oldBar1=(int)(airPressure/10);
+                                
 			}
 		});
                 b2.addAirPressureListener(new BrickletBarometer.AirPressureListener() {
 			public void airPressure(int airPressure) {
-				System.out.println("Air Pressure: " + (int)(airPressure) + " mbar " + "diff "+(int)(airPressure - 979828) );
-                               // old=(int)(airPressure);
+                                
+				if(Math.abs((int)(airPressure/10- oldBar2 ))>=2){
+                                    if(bigChange1!=0){
+                                      System.out.println("Air Pressure 2: " + (int)(airPressure/10) + " cbar " + (int)(airPressure/10- oldBar2 ) + "diff" );
+
+                                    }
+                                
+				//System.out.println("Air Pressure 2: " + (int)(airPressure/10) + " cbar " + (int)(airPressure/10- oldBar2 ) + "diff" );
+                            }
+                                oldBar2=(int)(airPressure/10);
 			}
 		});
 
