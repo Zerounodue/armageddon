@@ -19,7 +19,7 @@ public class ExampleCallback {
         private static boolean t2;
         
         private static int count = NOT;
-        private static int[] pressures = new int[NOT];
+        private static int[][] pressures = new int[NOT][2];
             
         
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
@@ -37,33 +37,34 @@ public class ExampleCallback {
 
 	}
         
-        public static synchronized void report(int p, String uId, int index){
+        public static synchronized void report(int p,int oldp, String uId, int index){
             
             count--;
+            boolean all=true;
             
-            pressures[index] = p;
-            
-            /*
-            switch (uId) {
-                case "qMZ":
-                    t1 = true;
-                    pressures[i] = p;
-                    break;
-                case "qFs":
-                    t2 = true;
-                    break;
-                case "qFm":
-                    t2 = true;
-                    break;
-                case "qFz":
-                    t2 = true;
-                    break;
-            }
-                    */
-            
+            pressures[index][0] = p;
+            pressures[index][1] = oldp;
+           // System.out.println(oldp);
+  
             if(count == 0){
-                System.out.println("yup");
+               // System.out.println("yup");
+                for(int i=0; i<pressures.length; i++){
+                    //System.out.println("now "+pressures[i][0]+" old "+pressures[i][1]);
+                    System.out.println(Math.abs(pressures[i][0]- pressures[i][1]));
+                    if(Math.abs((int)(pressures[i][0]- pressures[i][1] ))>2){
+                        //System.out.println("now "+pressures[i][0]+" old "+pressures[i][1]);
+                        
+                        all=all&&true;
+                    }
+                    else{all=all&&false;}
+                }
+                System.out.println("");
+                
                 count = NOT;
+                if(all){
+                    System.out.println("All changed");
+                }
+                all=true;
             }
                     
         }

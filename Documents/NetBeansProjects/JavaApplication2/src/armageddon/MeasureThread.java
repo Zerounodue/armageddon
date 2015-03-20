@@ -36,7 +36,7 @@ public class MeasureThread implements Runnable {
 	BrickletBarometer b1 = new BrickletBarometer(UId, ipcon1); // Create device object
         try {
             ipcon1.connect(HOST, PORT); // Connect to brickd
-            b1.setAirPressureCallbackPeriod(100);
+            b1.setAirPressureCallbackPeriod(500);
             b1.addAirPressureListener(new BrickletBarometer.AirPressureListener() {
 			public void airPressure(int airPressure) {
                             /*
@@ -45,12 +45,16 @@ public class MeasureThread implements Runnable {
                             }
                             */
                             
+                            ExampleCallback.report(airPressure/10, oldBar1,  UId, index);
+                            oldBar1 = airPressure/10;
+                            /*
                             if(Math.abs((int)(airPressure/10- oldBar1 ))>10){
                                 //System.out.println("Air Pressure "+UId+": " + (int)(airPressure/10) + " cBar " + (int)(airPressure/10- oldBar1 ) + " diff" );
                                                                 
                                 ExampleCallback.report(airPressure, UId, index);
                                 oldBar1 = airPressure/10;
                             }
+                                    */
 			}
 		});
             //System.out.println("Press key to exit"); System.in.read();
