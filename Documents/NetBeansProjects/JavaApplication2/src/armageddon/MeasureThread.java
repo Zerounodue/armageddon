@@ -22,10 +22,12 @@ public class MeasureThread implements Runnable {
     private static final String HOST = "localhost";
     private static final int PORT = 4223;
     private String UId;
+    private int index;
     private int oldBar1 = 0;
     
-    public MeasureThread(String uid){
+    public MeasureThread(String uid, int i){
         UId = uid;
+        index = i;
     }
     
     @Override
@@ -34,17 +36,21 @@ public class MeasureThread implements Runnable {
 	BrickletBarometer b1 = new BrickletBarometer(UId, ipcon1); // Create device object
         try {
             ipcon1.connect(HOST, PORT); // Connect to brickd
-            b1.setAirPressureCallbackPeriod(500);
+            b1.setAirPressureCallbackPeriod(100);
             b1.addAirPressureListener(new BrickletBarometer.AirPressureListener() {
 			public void airPressure(int airPressure) {
-                            
+                            /*
                             if(Math.abs((int)(airPressure/10- oldBar1 ))>=2){
-                                
 				System.out.println("Air Pressure "+UId+": " + (int)(airPressure/10) + " cbar " + (int)(airPressure/10- oldBar1 ) + "diff" );
-                               
                             }
+                            */
                             
-                                
+                            if(Math.abs((int)(airPressure/10- oldBar1 ))>10){
+                                //System.out.println("Air Pressure "+UId+": " + (int)(airPressure/10) + " cBar " + (int)(airPressure/10- oldBar1 ) + " diff" );
+                                                                
+                                ExampleCallback.report(airPressure, UId, index);
+                                oldBar1 = airPressure/10;
+                            }
 			}
 		});
             //System.out.println("Press key to exit"); System.in.read();
