@@ -26,11 +26,11 @@ public class MeasureThread implements Runnable {
     private int oldBar1 = 0;
     
     //only with this parameter peaks are recognised
-    //Air pressure moving average lenght
+    //Air pressure moving average length
     private final short apmal =1;
-    //Air pressure average lenght
+    //Air pressure average length
     private final short apal=10;
-    //Temperature average lenght
+    //Temperature average length
     private final short tal=5;
     
     public MeasureThread(String uid, int i){
