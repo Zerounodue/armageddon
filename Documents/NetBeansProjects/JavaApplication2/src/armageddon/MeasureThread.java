@@ -25,8 +25,12 @@ public class MeasureThread implements Runnable {
     private int index;
     private int oldBar1 = 0;
     
+    //only with this parameter peaks are recognised
+    //Air pressure moving average lenght
     private final short apmal =1;
+    //Air pressure average lenght
     private final short apal=10;
+    //Temperature average lenght
     private final short tal=5;
     
     public MeasureThread(String uid, int i){
@@ -42,6 +46,7 @@ public class MeasureThread implements Runnable {
                
         try {
             ipcon1.connect(HOST, PORT); // Connect to brickd
+            //set parameters
             b1.setAveraging(apmal, apal, tal);
             b1.setAirPressureCallbackPeriod(500);
             b1.addAirPressureListener(new BrickletBarometer.AirPressureListener() {

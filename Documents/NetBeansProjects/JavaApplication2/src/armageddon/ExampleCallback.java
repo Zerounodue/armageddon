@@ -5,43 +5,36 @@
  */
 package armageddon;
 
-import com.tinkerforge.BrickletBarometer;
-import com.tinkerforge.IPConnection;
-import java.time.Clock;
 import java.util.ArrayList;
 
 public class ExampleCallback {
         //Number Of Threads
         private final static int NOT = 4;
-        //
+        //minimal change to recognise a peak
         private final static int MINIMAL_CHANGE = 20;
+        //names of barometers
         private static String[] UIDs = {"qMZ", "qFs", "qFm", "qFz"};
+        //barometer thread list
         private static ArrayList<Runnable> threads = new ArrayList<>();
-     
-        private static boolean t1;
-        private static boolean t2;
-        
+
         private static int count = NOT;
+        //stored name, old pressure and actual pressure of all barometers
         private static int[][] pressures = new int[NOT][2];
         
-        private static volatile int one =0;
-        
+        private static volatile int state =0;       
       
-            
         
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
 	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
-            
+            //create threads for barometers
             for (int i = 0; i < NOT; i++) {
                 String uid = UIDs[i];
                 MeasureThread t = new MeasureThread(uid, i);
                 t.run();
                 threads.add(t);
             }
-            
             System.out.println("Press key to exit"); System.in.read();
-
 	}
         
         public static synchronized void report(int p,int oldp, String uId, int index){
@@ -51,66 +44,68 @@ public class ExampleCallback {
             int allMinus=0;
             
            
-            
+            //actual pressure
             pressures[index][0] = p;
+            //old pressure
             pressures[index][1] = oldp;
-           // System.out.println(oldp);
-  
+
+            //only if this method was called form all barometers...
             if(count == 0){
                 
-               // System.out.println("yup");
                 for(int i=0; i<pressures.length; i++){
+                    //first pressure is not relevant
                     if((pressures[i][0] - pressures[i][1])>10000){break;}
-                    //System.out.println(Math.abs(pressures[i][0]- pressures[i][1]));
+                    
+                    //print datas from barometers
                      //System.out.println(pressures[i][0] - pressures[i][1]);
+                    //one barometer measured a positive change
                     if((int)(pressures[i][0]- pressures[i][1] )>MINIMAL_CHANGE){  
                         allPlus++;
                     }
+                    //one barometer measured a negative change
                     else if((int)(pressures[i][0]- pressures[i][1] )<-MINIMAL_CHANGE){  
                         allMinus++;
                     }
-                    //else{all=all&&false;}
                 }
                 
                 
+                //    \  /
+                //     \/
+                //a peak is "open" if there are allMinus and then 
+                
+                
+                //     /\
+                //    /  \
+                //a peak is "cose" if there are allPlus and then allMinus
                 
                 count = NOT;
-                if(allPlus>=2){
-                    
-                   // System.out.println("AllPlus one= "+one);
-                    
-                    
-                    if(one==-1){
+                //at least 2 barometer mesured a positive change
+                if(allPlus>=2){               
+                   // System.out.println("AllPlus state= "+state);                                      
+                    if(state==-1){
                         //two="close";
                         System.out.println("open");
-                        one=0;
+                        state=0;
                     }
                     else{
-                    one =1;
+                    state =1;
                     }
-                    
-                   
                 }
+                //at least 2 barometer mesured a negative change
                 else if(allMinus>=2){
-                   // System.out.println("AllMinus one ="+one);
-                    if(one==1){
+                   // System.out.println("AllMinus state ="+state);
+                    if(state==1){
                         System.out.println("close");
                         //two="";
-                        one=0;
+                        state=0;
                     }
                     else{
-                    one= -1;
-                    }
-                    
+                    state= -1;
+                    }                   
                 }
                 //System.out.println("");
                 allMinus=0;
-                allPlus=0;
-                
-                
-                
-                   
-            }
-                    
+                allPlus=0;   
+            }                
         }
 }
