@@ -25,6 +25,10 @@ public class MeasureThread implements Runnable {
     private int index;
     private int oldBar1 = 0;
     
+    private final short apmal =1;
+    private final short apal=10;
+    private final short tal=5;
+    
     public MeasureThread(String uid, int i){
         UId = uid;
         index = i;
@@ -34,33 +38,20 @@ public class MeasureThread implements Runnable {
     public void run() {
         IPConnection ipcon1 = new IPConnection(); // Create IP connection
 	BrickletBarometer b1 = new BrickletBarometer(UId, ipcon1); // Create device object
+       
+               
         try {
             ipcon1.connect(HOST, PORT); // Connect to brickd
+            b1.setAveraging(apmal, apal, tal);
             b1.setAirPressureCallbackPeriod(500);
             b1.addAirPressureListener(new BrickletBarometer.AirPressureListener() {
 			public void airPressure(int airPressure) {
-                            /*
-                            if(Math.abs((int)(airPressure/10- oldBar1 ))>=2){
-				System.out.println("Air Pressure "+UId+": " + (int)(airPressure/10) + " cbar " + (int)(airPressure/10- oldBar1 ) + "diff" );
-                            }
-                            */
-                            
-                            ExampleCallback.report(airPressure/10, oldBar1,  UId, index);
-                            oldBar1 = airPressure/10;
-                            /*
-                            if(Math.abs((int)(airPressure/10- oldBar1 ))>10){
-                                //System.out.println("Air Pressure "+UId+": " + (int)(airPressure/10) + " cBar " + (int)(airPressure/10- oldBar1 ) + " diff" );
-                                                                
-                                ExampleCallback.report(airPressure, UId, index);
-                                oldBar1 = airPressure/10;
-                            }
-                                    */
+                            ExampleCallback.report(airPressure, oldBar1,  UId, index);
+                            oldBar1 = airPressure;
+
 			}
 		});
-            //System.out.println("Press key to exit"); System.in.read();
-		//ipcon1.disconnect();
-            
-            
+
             
         } catch (IOException ex) {
             Logger.getLogger(MeasureThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,6 +68,10 @@ public class MeasureThread implements Runnable {
         
         
         
+    }
+
+    private void setAveraging(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
